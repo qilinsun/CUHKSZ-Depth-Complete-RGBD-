@@ -24,6 +24,7 @@ def plt_visualize(rgb, depth, depsp, jet_path):
     vmin, vmax = depth.min(), depth.max()
     spot_depth = depsp
     
+    width, height = rgb.shape[0], rgb.shape[1]
     x_sp, y_sp = np.where(spot_depth>0)
     d_sp = spot_depth[x_sp, y_sp]
 
@@ -40,9 +41,9 @@ def plt_visualize(rgb, depth, depsp, jet_path):
     axs[0].imshow(rgb)
     axs[1].imshow(depth, cmap='jet_r', vmin=vmin, vmax=vmax)
     imc = axs[2].scatter(y_sp,x_sp,np.ones_like(x_sp)*0.1,c=d_sp,cmap='jet_r', vmin=vmin, vmax=vmax)
-    axs[2].axis([0,256,192,0])
-    asp = abs(np.diff(axs[2].get_xlim())[0] / np.diff(axs[2].get_ylim())[0]) *192/256
-    axs[2].set_aspect(asp)
+    axs[2].axis([0,height,width,0])
+    # asp = abs(np.diff(axs[2].get_xlim())[0] / np.diff(axs[2].get_ylim())[0]) *height/width
+    # axs[2].set_aspect(asp)
     for ii, title_name in enumerate(title_names):
         axs[ii].set_title(title_name, fontsize=12)
         axs[ii].set_xticks([])
@@ -87,11 +88,12 @@ def visual(args):
             bgr = cv2.imread(rgb_path)
             np_rgb = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
             np_dep = cv2.imread(depsp_path, cv2.IMREAD_ANYDEPTH)
+            np_dep = np_dep / 1000.0
 
             # from nparray to PIL
             rgb = Image.fromarray(np_rgb)
             dep = np_dep.astype(np.float32)
-            dep[dep>20] = 0
+            dep[dep>10] = 0
             dep = Image.fromarray(dep)
             
             t_rgb = T.Compose([

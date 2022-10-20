@@ -14,6 +14,6 @@ do
     --output_num 3 \
     --readme_path ${name}/${metric} \
     --ckp_path ../checkpoints/milestone.pth.tar \
-    --gpu 2
+    --gpu 0
 done
 # !
