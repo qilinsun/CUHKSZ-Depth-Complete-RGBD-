@@ -7,7 +7,7 @@ $$P_{rgb} = R^{-1}*P_{dep3d} - R^{-1}*T$$
 
 ### Result
 Result of the aligned depth map are in folder "/EMDC-Pytorch/Submit/calidation_input/data0929/align_depth_rgb" and "/aligned_depth"
-![avatar](/EMDC-PyTorch/Submit/validation_input/data0929/align_depth_rgb/frame-000000.color.png)
+![avatar](Submit/validation_input/data0929/align_depth_rgb/frame-000000.color.png)
 
 ### Problem
 1. There are grids in the image. Probably because RGB image is 1920\*1080 while depth image is only 640\*480. Reasons not clear so far.
@@ -21,12 +21,12 @@ Result of the aligned depth map are in folder "/EMDC-Pytorch/Submit/calidation_i
 ### Result
 Result are in folder  EMDC-PyTorch/Submit/results/EMDC-validation/visual/data0929/aligned_depth/.
 
-[link](EMDC-PyTorch/Submit/results/EMDC-validation/visual/data0929/aligned_depth/frame-000001.depth_jet.png)
+[link](Submit/results/EMDC-validation/visual/data0929/aligned_depth/frame-000001.depth_jet.png)
 
 1. It will show the grid-like feature in the input aligned depth map.
 2. The predictions in the corresponding depth-missing area is not good.
 
-[link](EMDC-PyTorch/Submit/results/EMDC-validation/visual/data0929/aligned_depth/frame-000002.depth_jet.png)
+[link](Submit/results/EMDC-validation/visual/data0929/aligned_depth/frame-000002.depth_jet.png)
 
 ### Solutions
 
