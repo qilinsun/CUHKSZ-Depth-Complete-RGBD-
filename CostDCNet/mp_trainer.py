@@ -1,17 +1,20 @@
 import numpy as np
 import time
+import os
 import glob
 import torch
 import torch.nn.functional as F
 from torch.utils.data import DataLoader
 from utils import *
-from datasets.nyu import NYU
+# from datasets.nyu import NYU
 from datasets.mp import MP
 from trainer_base import Trainer
 import MinkowskiEngine as ME
 from models.encoder3d import Encoder3D
 from models.encoder2d import Encoder2D
 from models.unet3d import UNet3D
+
+# Reference : https://github.com/nianticlabs/monodepth2
 
 class Mp_trainer(Trainer):
     def __init__(self, options):
@@ -85,7 +88,7 @@ class Mp_trainer(Trainer):
             outputs["mem"] = torch.cuda.memory_allocated(self.device) / 1024 / 1024
             print(outputs["time"], outputs["mem"])
             
-        outputs[("depth", 0, 0)] = pred
+        outputs["depth"] = pred
         losses["loss"] = L1_mask(gt, pred, gt_mask)
 
         return outputs, losses
@@ -157,20 +160,62 @@ class Mp_trainer(Trainer):
 
     def set_dataset(self):
         self.dataset = MP
-        if not self.is_eval:    
-            train_dataset = self.dataset(self.dataset_name, self.data_path, train = True)
+        if not self.is_eval:
+            train_data_path = os.path.join(self.data_path, 'train')    
+            train_dataset = self.dataset(self.dataset_name, train_data_path, train = True)
             self.train_loader = DataLoader(
                 train_dataset, self.opt.batch_size, True,
             num_workers=self.opt.num_workers, pin_memory=False, drop_last=False)
             
-        test_dataset = self.dataset(self.dataset_name, self.data_path, train = False)
-        self.test_loader = DataLoader(
+        test_data_path = os.path.join(self.data_path, 'test')    
+        test_dataset = self.dataset(self.dataset_name, test_data_path, train = False)
+        self.val_loader = DataLoader(
             test_dataset, self.opt.batch_size, True,
             num_workers=self.opt.num_workers, pin_memory=False, drop_last=False)
-        self.test_iter = iter(self.test_loader)
+        self.val_iter = iter(self.val_loader)
         
         print('There are {} training items'.format(len(train_dataset)))
         print('There are {} testing items'.format(len(test_dataset)))
+        
+    def log(self, mode, inputs, outputs, losses):
+        """Write an event to the tensorboard events file
+        """
+        writer = self.writers[mode]
+        for l, v in losses.items():
+            writer.add_scalar("{}".format(l), v, self.step)
+
+        for j in range(min(4, self.opt.batch_size)):  # write a maxmimum of four images
+            writer.add_image(
+                "color_{}_{}".format(inputs[j]["scene_name"], j),
+                inputs[j]["color"], self.step
+            )
+            writer.add_image(
+                "raw_dep_{}_{}".format(inputs[j]["scene_name"], j),
+                inputs[j]["depth"], self.step
+            )
+            writer.add_image(
+                "pred_dep_{}_{}".format(inputs[j]["scene_name"], j),
+                outputs[j]["depth"], self.step
+            )
+            writer.add_image(
+                "GT_dep_{}_{}".format(inputs[j]["scene_name"], j),
+                outputs[j]["render_depth"], self.step
+            )
+    
+    def save_model(self):
+        """Save model weights to disk
+        """
+        save_folder = os.path.join(self.log_path, "models", "weights_{}".format(self.epoch))
+        if not os.path.exists(save_folder):
+            os.makedirs(save_folder)
+
+        for model_name, model in self.models.items():
+            save_path = os.path.join(save_folder, "{}.pth".format(model_name))
+            to_save = model.state_dict()
+            torch.save(to_save, save_path)
+
+        save_path = os.path.join(save_folder, "{}.pth".format("adam"))
+        torch.save(self.model_optimizer.state_dict(), save_path)
 
     def evaluate(self, is_offline= False):
         """Run the entire training pipeline
@@ -192,10 +237,10 @@ class Mp_trainer(Trainer):
         with torch.no_grad(): 
             for batch_idx, inputs in enumerate(self.test_loader):
                 outputs, losses = self.process_batch(inputs, is_val = True)
-                batch = outputs[("depth", 0, 0)].size(0)
+                batch = outputs["depth"].size(0)
                 for i in range(batch):
-                    pred = outputs[("depth", 0, 0)][i].unsqueeze(0)
-                    gt = inputs[("depth_gt", 1, 0)][i].unsqueeze(0)
+                    pred = outputs["depth"][i].unsqueeze(0)
+                    gt = inputs["depth_gt"][i].unsqueeze(0)
                     mini_result = evaluate(gt, pred, losses, is_test = True)
                     result = torch.vstack([result, mini_result])
                     if self.opt.time:
@@ -209,6 +254,8 @@ class Mp_trainer(Trainer):
         print_string = ">>> [Test] RMSE {:.4f} | REL {:.4f} | d1: {:.4f} | d2: {:.4f} | d3: {:.4f} "
         print(print_string.format(fin[0], fin[4], fin[5], fin[6], fin[7]))
         exit()
+        
+    
     
 from options import Options
 
@@ -217,6 +264,7 @@ opts = options.parse()
 
 if __name__ == "__main__":
     print('Testing mode')
-    # trainer = Sub_trainer(opts)
+    trainer = Mp_trainer(opts)
+    trainer.train()
     # trainer.evaluate(is_offline=True)
 

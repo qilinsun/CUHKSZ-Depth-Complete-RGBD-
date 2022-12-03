@@ -15,15 +15,16 @@ class Trainer:
     def __init__(self, options):
         self.opt = options
 
-        self.opt.name = sys.argv[0].split('/')[-1].split('.')[0][8:]
-        self.log_path = os.path.join("./runs", self.opt.name)
+        # self.opt.name = sys.argv[0].split('/')[-1].split('.')[0][8:]
+        # self.log_path = os.path.join("./runs", self.opt.name)
+        self.log_path = os.path.join("./runs", '')
         
         GPU_NUM = self.opt.gpu
         self.device = torch.device(f'cuda:{GPU_NUM}' if torch.cuda.is_available() else 'cpu')
         torch.cuda.set_device(self.device) # change allocation of current GPU
         
         self.epoch = 0
-        self.step = 0
+        self.step = 0 
         
         self.set_init()
 
@@ -162,6 +163,7 @@ class Trainer:
         with open(os.path.join(models_dir, 'opt.json'), 'w') as f:
             json.dump(to_save, f, indent=2)
 
+        
 # from options import Options
 
 # options = Options()
