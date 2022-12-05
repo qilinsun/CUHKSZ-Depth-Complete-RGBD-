@@ -117,7 +117,9 @@ percentages δx of inlier pixels with the less than x meters error
 d1: 0.8487 | d2: 0.9068 | d3: 0.9308 
 
 问题1： 按paper里的说法他训练了50epoch,每20epoch调整一次learning rate。但我这里实验的时候训练很快就训练不动了。不知道可能的原因是什么
+
 问题2： 从结果上来看，与paper结果差距不是很大
+
 问题3：对于大片缺失的深度图（如下图），预测结果差
 
 raw depth
