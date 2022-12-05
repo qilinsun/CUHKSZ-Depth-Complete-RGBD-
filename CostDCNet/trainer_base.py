@@ -17,7 +17,9 @@ class Trainer:
 
         # self.opt.name = sys.argv[0].split('/')[-1].split('.')[0][8:]
         # self.log_path = os.path.join("./runs", self.opt.name)
-        self.log_path = os.path.join("./runs", '')
+        now = time.strftime("%Y%m%d_%H%M%S", time.localtime())
+        model_name = f'crnn_{now}'  
+        self.log_path = os.path.join("./runs", model_name)
         
         GPU_NUM = self.opt.gpu
         self.device = torch.device(f'cuda:{GPU_NUM}' if torch.cuda.is_available() else 'cpu')
@@ -101,9 +103,9 @@ class Trainer:
             # log less frequently after the first 2000 steps to save time & disk space
             early_phase = batch_idx % self.opt.log_frequency == 0 and self.step < 2000
             late_phase = self.step % 2000 == 0
-
-            if early_phase or late_phase:
+            if (batch_idx % 10 == 0):
                 self.log_time(batch_idx, duration, losses["loss"].cpu().data)
+            if early_phase or late_phase:
 
                 # if "depth_gt" in inputs:
                 #     self.compute_depth_losses(inputs, outputs, losses)
@@ -118,10 +120,10 @@ class Trainer:
         """
         self.set_eval()
         try:
-            inputs = self.val_iter.next()
+            inputs = next(self.val_iter)
         except StopIteration:
             self.val_iter = iter(self.val_loader)
-            inputs = self.val_iter.next()
+            inputs = next(self.val_iter)
 
         with torch.no_grad():
             outputs, losses = self.process_batch(inputs, is_val = True)
@@ -139,8 +141,9 @@ class Trainer:
         """
         samples_per_sec = self.opt.batch_size / duration
         time_sofar = time.time() - self.start_time
-        training_time_left = (
-            self.num_total_steps / self.step - 1.0) * time_sofar if self.step > 0 else 0
+        # training_time_left = (
+        #     self.num_total_steps / self.step - 1.0) * time_sofar if self.step > 0 else 0
+        training_time_left = 0
         print_string = "epoch {:>3} | batch {:>6} | examples/s: {:5.1f}" + \
             " | loss: {:.5f} | time elapsed: {} | time left: {}"
         print(print_string.format(self.epoch, batch_idx, samples_per_sec, loss,
@@ -148,8 +151,10 @@ class Trainer:
 
     def update_time(self):
         time_sofar = time.time() - self.start_time
-        training_time_left = (
-            self.num_total_steps / self.step - 1.0) * time_sofar if self.step > 0 else 0
+        # training_time_left = (
+        #     self.num_total_steps / self.step - 1.0) * time_sofar if self.step > 0 else 0
+        training_time_left = 0
+        
         return sec_to_hm_str(time_sofar), sec_to_hm_str(training_time_left)
 
     def save_opts(self):

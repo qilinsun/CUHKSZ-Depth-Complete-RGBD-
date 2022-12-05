@@ -13,6 +13,9 @@ import MinkowskiEngine as ME
 from models.encoder3d import Encoder3D
 from models.encoder2d import Encoder2D
 from models.unet3d import UNet3D
+from datasets.mp import customed_collate_fn
+from tensorboardX import SummaryWriter
+from PIL import Image
 
 # Reference : https://github.com/nianticlabs/monodepth2
 
@@ -27,10 +30,14 @@ class Mp_trainer(Trainer):
         self.is_eval = self.opt.is_eval
         self.dataset_name = 'matterport'
         self.data_path = self.opt.data_path
+    
         # Networks
         self.models["enc2d"]  = Encoder2D(in_ch=4, output_dim=16)  
         self.models["enc3d"]  = Encoder3D(1, 16, D= 3, planes=(32, 48, 64)) 
         self.models["unet3d"] = UNet3D(32, self.opt.up_scale**2, f_maps=[32, 48, 64, 80], mode="nearest")
+        
+        if self.opt.load_model:
+            self.load_model()
         
         for m in self.models:
             self.models[m].to(self.device)
@@ -43,8 +50,8 @@ class Mp_trainer(Trainer):
         # Train Mode
         if not self.is_eval:
             # Optimizer
-            self.learning_rate = 0.0005
-            self.scheduler_step_size = 20
+            self.learning_rate = 0.00025
+            self.scheduler_step_size = 5
             self.model_optimizer = torch.optim.Adam(self.parameters_to_train, self.learning_rate)
             self.model_lr_scheduler = torch.optim.lr_scheduler.StepLR(
                 self.model_optimizer, self.scheduler_step_size, 0.5)
@@ -53,6 +60,8 @@ class Mp_trainer(Trainer):
         """Pass a minibatch through the network and generate images and losses
         """
         for key, ipt in inputs.items():
+            if key == 'scene_name':
+                continue
             inputs[key] = ipt.to(self.device)
         
         outputs = {}
@@ -63,7 +72,6 @@ class Mp_trainer(Trainer):
         mask = inputs["mask"]
         gt = inputs["render_depth"]
         gt_mask = inputs["gt_mask"]
-
         if self.opt.time:
             torch.cuda.synchronize()
             before_op_time = time.time()
@@ -165,42 +173,60 @@ class Mp_trainer(Trainer):
             train_dataset = self.dataset(self.dataset_name, train_data_path, train = True)
             self.train_loader = DataLoader(
                 train_dataset, self.opt.batch_size, True,
-            num_workers=self.opt.num_workers, pin_memory=False, drop_last=False)
+                num_workers=self.opt.num_workers, pin_memory=False, drop_last=False,
+                collate_fn = customed_collate_fn(self.dataset_name))
             
         test_data_path = os.path.join(self.data_path, 'test')    
         test_dataset = self.dataset(self.dataset_name, test_data_path, train = False)
         self.val_loader = DataLoader(
             test_dataset, self.opt.batch_size, True,
-            num_workers=self.opt.num_workers, pin_memory=False, drop_last=False)
+            num_workers=self.opt.num_workers, pin_memory=False, drop_last=False,
+            collate_fn = customed_collate_fn(self.dataset_name))
         self.val_iter = iter(self.val_loader)
-        
-        print('There are {} training items'.format(len(train_dataset)))
+        if not self.is_eval:
+            print('There are {} training items'.format(len(train_dataset)))
         print('There are {} testing items'.format(len(test_dataset)))
         
     def log(self, mode, inputs, outputs, losses):
         """Write an event to the tensorboard events file
         """
-        writer = self.writers[mode]
-        for l, v in losses.items():
-            writer.add_scalar("{}".format(l), v, self.step)
+        if not self.is_eval:
+            writer = self.writers[mode]
+            for l, v in losses.items():
+                writer.add_scalar("{}".format(l), v, self.step)
+            
+        
+        dir = "{}/{}/{}".format(self.opt.gallary_path, mode, self.step)
+        if not os.path.exists(dir):
+            os.makedirs(dir)
 
         for j in range(min(4, self.opt.batch_size)):  # write a maxmimum of four images
-            writer.add_image(
-                "color_{}_{}".format(inputs[j]["scene_name"], j),
-                inputs[j]["color"], self.step
-            )
-            writer.add_image(
-                "raw_dep_{}_{}".format(inputs[j]["scene_name"], j),
-                inputs[j]["depth"], self.step
-            )
-            writer.add_image(
-                "pred_dep_{}_{}".format(inputs[j]["scene_name"], j),
-                outputs[j]["depth"], self.step
-            )
-            writer.add_image(
-                "GT_dep_{}_{}".format(inputs[j]["scene_name"], j),
-                outputs[j]["render_depth"], self.step
-            )
+            GT_dep = inputs["render_depth"][j].clone().detach()
+            pred_dep = outputs["depth"][j].clone().detach()
+            raw_dep = inputs["depth"][j].clone().detach()
+            
+            GT_dep = GT_dep.to(torch.device('cpu'))
+            pred_dep = pred_dep.to(torch.device('cpu'))
+            raw_dep = raw_dep.to(torch.device('cpu'))
+            
+            GT_dep = GT_dep.squeeze()
+            pred_dep = pred_dep.squeeze()
+            raw_dep = raw_dep.squeeze()
+            
+            GT_dep = GT_dep.mul_(4000).type(torch.int32).numpy()
+            pred_dep = pred_dep.mul_(4000).type(torch.int32).numpy()
+            raw_dep = raw_dep.mul_(4000).type(torch.int32).numpy()
+            
+            gt_im = Image.fromarray(GT_dep)
+            pred_im = Image.fromarray(pred_dep)
+            raw_im = Image.fromarray(raw_dep)
+            gt_filename = os.path.join(dir, "{}_{}_{}.png".format("GT_depth", inputs["scene_name"][j], j))
+            pred_dep_filename = os.path.join(dir, "{}_{}_{}.png".format("pred_dep", inputs["scene_name"][j], j))
+            raw_dep_filename = os.path.join(dir, "{}_{}_{}.png".format("raw_dep", inputs["scene_name"][j], j))
+            
+            gt_im.save(gt_filename)
+            pred_im.save(pred_dep_filename)
+            raw_im.save(raw_dep_filename)
     
     def save_model(self):
         """Save model weights to disk
@@ -217,6 +243,32 @@ class Mp_trainer(Trainer):
         save_path = os.path.join(save_folder, "{}.pth".format("adam"))
         torch.save(self.model_optimizer.state_dict(), save_path)
 
+    def load_model(self):
+        """Load model(s) from disk"""
+        
+        assert os.path.isdir(self.opt.weight_path), \
+            "Cannot find folder {}".format(self.opt.weight_path)
+        print("loading model from folder {}".format(self.opt.weight_path))
+
+        for n in self.opt.models_to_load:
+            print("Loading {} weights...".format(n))
+            path = os.path.join(self.opt.weight_path, "{}.pth".format(n))
+            model_dict = self.models[n].state_dict()
+            pretrained_dict = torch.load(path)
+            pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
+            model_dict.update(pretrained_dict)
+            self.models[n].load_state_dict(model_dict)
+
+        # loading adam state
+        # optimizer_load_path = os.path.join(self.opt.weight_path, "adam.pth")
+        # if os.path.isfile(optimizer_load_path):
+        #     print("Loading Adam weights")
+        #     optimizer_dict = torch.load(optimizer_load_path)
+        #     self.model_optimizer.load_state_dict(optimizer_dict)
+        # else:
+        #     print("Cannot find Adam weights so Adam is randomly initialized")
+    
+    
     def evaluate(self, is_offline= False):
         """Run the entire training pipeline
         # """
@@ -229,20 +281,21 @@ class Mp_trainer(Trainer):
                 if name not in ['adam', 'sche'] :
                     self.models[name].load_state_dict(torch.load(m, map_location=self.device), strict=False)
 
-        
+        print("evaling")
         self.set_eval()
         result = torch.empty((0,8),device = self.device)
         times = []
         mems = []
         with torch.no_grad(): 
-            for batch_idx, inputs in enumerate(self.test_loader):
+            for batch_idx, inputs in enumerate(self.val_loader):
                 outputs, losses = self.process_batch(inputs, is_val = True)
                 batch = outputs["depth"].size(0)
                 for i in range(batch):
                     pred = outputs["depth"][i].unsqueeze(0)
-                    gt = inputs["depth_gt"][i].unsqueeze(0)
+                    gt = inputs["render_depth"][i].unsqueeze(0)
                     mini_result = evaluate(gt, pred, losses, is_test = True)
                     result = torch.vstack([result, mini_result])
+                    self.log('eval', inputs, outputs, losses)
                     if self.opt.time:
                         times.append(outputs["time"])
                         mems.append(outputs["mem"])
@@ -264,7 +317,48 @@ opts = options.parse()
 
 if __name__ == "__main__":
     print('Testing mode')
-    trainer = Mp_trainer(opts)
-    trainer.train()
-    # trainer.evaluate(is_offline=True)
+    
+    now = time.strftime("%Y%m%d_%H%M%S", time.localtime())
+    model_name = f'crnn_{now}'  
+    log_path = os.path.join("./runs", model_name)
+
+    writer = SummaryWriter(os.path.join(log_path, 'testing'))
+    dataset = MP
+    dataset_name = 'matterport'
+    train_data_path = os.path.join(opts.data_path, 'train')    
+    train_dataset = dataset(dataset_name, train_data_path, train = True)
+    train_loader = DataLoader(
+        train_dataset, opts.batch_size, True,
+        num_workers=opts.num_workers, pin_memory=False, drop_last=False,
+        collate_fn = customed_collate_fn(dataset_name))
+    
+    
+    step = 0
+    for batch_idx, inputs in enumerate(train_loader):
+         for j in range(min(4, opts.batch_size)):  # write a maxmimum of four images
+             
+            GT_dep = inputs["render_depth"][j].clone().detach()
+            
+            GT_dep = GT_dep.to(torch.device('cpu'))
+            
+            GT_dep = GT_dep.squeeze()
+            
+            GT_dep = GT_dep.mul_(4000).type(torch.int32).numpy()
+            
+            im = Image.fromarray(GT_dep)
+            im.save("./gallary/GT_depth/{}_{}.png".format(inputs["scene_name"][j], j))
+            
+            # writer.add_image(
+            #     "raw_dep_{}_{}".format(inputs["scene_name"][j], j),
+            #     dep, step
+            # )
+            
+            writer.add_image(
+                "GT_dep_{}_{}".format(inputs["scene_name"][j], j),
+                inputs["render_depth"][j], step
+            )
+            
+            step += 1
+
+        
 

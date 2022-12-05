@@ -130,8 +130,9 @@ class MP(Dataset):
             mask = np.zeros_like(depth)
             mask[np.where(depth > 0.0)] = 1
             gt_mask = np.zeros_like(render_depth)
-            gt_mask = gt_mask[np.where(render_depth > 0.0)] = 1
+            gt_mask[np.where(render_depth > 0.0)] = 1
             color = np.array(Image.open(self.color_name[index]))
+            
             # normal = np.array(Image.open(self.normal_name[index]))
             # boundary = np.expand_dims(np.array(Image.open(self.boundary_name[index]))[:,:,2], 2)
             # depth_boundary = np.array(Image.open(self.depth_boundary_name[index]))
@@ -156,6 +157,7 @@ def customed_collate_fn_matterport(batch):
         if value.shape[0] != trans_height or value.shape[1] != trans_width:
             value = numpy_resize(value, (trans_height, trans_width), mode='constant', anti_aliasing=False)
         value = torch.tensor(value).type(torch.float32)
+        
         return value
     def _transform_fn(key, value):
         if key == 'depth':
@@ -165,10 +167,13 @@ def customed_collate_fn_matterport(batch):
         elif key == 'mask':
             value = numpy_transform(value)
             value = torch.unsqueeze(value, 0)
-        elif key == 'render_depth':
+        elif key == 'gt_mask':
             value = numpy_transform(value)
             value = torch.unsqueeze(value, 0)
+        elif key == 'render_depth':
+            value = numpy_transform(value)
             value /= 4000.00
+            value = torch.unsqueeze(value, 0)
         elif key == 'color':
             value = numpy_transform(value)
             value /= 255
@@ -193,6 +198,7 @@ def customed_collate_fn_matterport(batch):
         if key == 'scene_name':
             values[key] = [one_batch[key] for one_batch in batch]
         else:
-            this_value = torch.stack([_transform_fn(key, one_batch[key]) for one_batch in batch], 0, out=None)
+            arr = [_transform_fn(key, one_batch[key]) for one_batch in batch]
+            this_value = torch.stack(arr, 0, out=None)
             values[key] = this_value
     return values
