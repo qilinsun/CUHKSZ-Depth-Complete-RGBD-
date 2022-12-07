@@ -133,3 +133,10 @@ prediction
 ground truth
 
 ![](GT_depth_fzynW3qQPVF_4038b577e794457d886a40f474bc5fdb_d1_2_3.png)
+
+
+## 2022/12/07
+
+使用cpu multiprocess 并行处理图片。 处理16张共花费5.66s。 平均0.35s/picture。
+
+还在研究怎么用gpu做图片并行处理。
