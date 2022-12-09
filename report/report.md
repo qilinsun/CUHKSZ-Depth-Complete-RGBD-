@@ -137,7 +137,7 @@ raw depth
 结果如下：
 
 <center class="half">
-    <img src="data0929_img/pred_dep_frame-000000_0.png" width="450"/><img src="data0929_img/raw_dep_frame-000000_0.png" width="450"/>
+    <img src="data0929_img/pred_dep_frame-000000_0.png" width="300"/><img src="data0929_img/raw_dep_frame-000000_0.png" width="300"/>
 </center>
 
 <center class="half">
