@@ -94,13 +94,7 @@ image size : 320*256
 raw depth
 
 ![](raw_dep_fzynW3qQPVF_23f90479f2cf4c60bc78cb3252fe64e8_d1_1_2.png)
-
-prediction
-
 ![](pred_dep_fzynW3qQPVF_23f90479f2cf4c60bc78cb3252fe64e8_d1_1_2.png)
-
-ground truth
-
 ![](GT_depth_fzynW3qQPVF_23f90479f2cf4c60bc78cb3252fe64e8_d1_1_2.png)
 
 
@@ -118,20 +112,11 @@ d1: 0.8487 | d2: 0.9068 | d3: 0.9308
 
 问题1： 按paper里的说法他训练了50epoch,每20epoch调整一次learning rate。但我这里实验的时候训练很快就训练不动了。不知道可能的原因是什么
 
-问题2： 从结果上来看，与paper结果差距不是很大
-
 问题3：对于大片缺失的深度图（如下图），预测结果差
 
 raw depth
 
-![](raw_dep_fzynW3qQPVF_4038b577e794457d886a40f474bc5fdb_d1_2_3.png)
-
-prediction
-
-![](pred_dep_fzynW3qQPVF_4038b577e794457d886a40f474bc5fdb_d1_2_3.png)
-
-ground truth
-
+![](raw_dep_fzynW3qQPVF_4038b577e794457d886a40f474bc5fdb_d1_2_3.png)![](pred_dep_fzynW3qQPVF_4038b577e794457d886a40f474bc5fdb_d1_2_3.png)
 ![](GT_depth_fzynW3qQPVF_4038b577e794457d886a40f474bc5fdb_d1_2_3.png)
 
 
@@ -140,3 +125,29 @@ ground truth
 使用cpu multiprocess 并行处理图片。 处理16张共花费5.66s。 平均0.35s/picture。
 
 还在研究怎么用gpu做图片并行处理。
+
+## 2022/12/09
+
+1. 改进插值，处理16张共3.22s
+
+2. 在data0929数据集上测试costDCNet
+
+图片大小由1080\*1920 裁剪为 864\*1080， 与网络训练输入比例相匹配
+
+结果如下：
+
+<center class="half">
+    <img src="data0929_img/pred_dep_frame-000000_0.png" width="450"/><img src="data0929_img/raw_dep_frame-000000_0.png" width="450"/>
+</center>
+
+<center class="half">
+    <img src="data0929_img/pred_dep_frame-000002_4.png" width="450"/><img src="data0929_img/raw_dep_frame-000002_4.png" width="450"/>
+</center>
+
+<center class="half">
+    <img src="data0929_img/pred_dep_frame-000004_3.png" width="450"/><img src="data0929_img/raw_dep_frame-000004_3.png" width="450"/>
+</center>
+
+<center class="half">
+    <img src="data0929_img/pred_dep_frame-000007_0.png" width="450"/><img src="data0929_img/raw_dep_frame-000007_0.png" width="450"/>
+</center>
