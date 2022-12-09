@@ -13,9 +13,9 @@ class Options:
         self.parser.add_argument("--save_frequency", type=int, help="number of epochs between each save", default=2)
 
         self.parser.add_argument('--gpu', type=int, default = 0, help='gpu id')
-        self.parser.add_argument("--data_path", type=str, default = '/data/tong/matterport/', help="path of dataset")
-        self.parser.add_argument("--gallary_path", type=str, default = './result', help="path of dataset")
-        self.parser.add_argument('--weight_path', type=str, default = './runs/crnn_20221204_201943/models/weights_11', help='path of pretrained weights')
+        self.parser.add_argument("--data_path", type=str, default = 'data0929', help="path of dataset")
+        self.parser.add_argument("--gallary_path", type=str, default = 'data0929/result', help="path of result")
+        self.parser.add_argument('--weight_path', type=str, default = 'CostDCNet/runs/crnn_20221204_201943/models/weights_11', help='path of pretrained weights')
         self.parser.add_argument('--models_to_load', type=str, default = ["enc2d", "enc3d", "unet3d"], help='path of pretrained weights')
         self.parser.add_argument('--is_eval', type=bool, default = True, help='evaluation')
         self.parser.add_argument('--time', type=bool,default = False, help='sec')
