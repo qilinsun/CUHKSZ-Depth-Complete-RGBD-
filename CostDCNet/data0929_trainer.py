@@ -13,7 +13,7 @@ import MinkowskiEngine as ME
 from models.encoder3d import Encoder3D
 from models.encoder2d import Encoder2D
 from models.unet3d import UNet3D
-from datasets.mp import customed_collate_fn
+from datasets.data0929 import customed_collate_fn
 from tensorboardX import SummaryWriter
 from PIL import Image
 
@@ -182,20 +182,16 @@ class Data0929_trainer(Trainer):
             print('There are {} training items'.format(len(train_dataset)))
         print('There are {} testing items'.format(len(test_dataset)))
         
-    def log(self, mode, inputs, outputs, losses):
+    def log(self, mode, inputs, outputs):
         """Write an event to the tensorboard events file
         """
-        if not self.is_eval:
-            writer = self.writers[mode]
-            for l, v in losses.items():
-                writer.add_scalar("{}".format(l), v, self.step)
             
         
         dir = "{}/{}/{}".format(self.opt.gallary_path, mode, self.step)
         if not os.path.exists(dir):
             os.makedirs(dir)
 
-        for j in range(self.opt.batch_size):  # write a maxmimum of four images
+        for j in range(min(self.opt.batch_size, len(inputs["depth"]))):  # write a maxmimum of four images
             pred_dep = outputs["depth"][j].clone().detach()
             raw_dep = inputs["depth"][j].clone().detach()
             
