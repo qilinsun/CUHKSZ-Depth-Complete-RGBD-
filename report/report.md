@@ -151,3 +151,7 @@ raw depth
 <center class="half">
     <img src="data0929_img/pred_dep_frame-000007_0.png" width="450"/><img src="data0929_img/raw_dep_frame-000007_0.png" width="450"/>
 </center>
+
+<center class="half">
+    <img src="data0929_img/pred_dep_frame-000008_7.png" width="450"/><img src="data0929_img/raw_dep_frame-000008_7.png" width="450"/>
+</center>
