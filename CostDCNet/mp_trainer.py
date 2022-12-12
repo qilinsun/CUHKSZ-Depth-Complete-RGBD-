@@ -55,6 +55,7 @@ class Mp_trainer(Trainer):
             self.model_optimizer = torch.optim.Adam(self.parameters_to_train, self.learning_rate)
             self.model_lr_scheduler = torch.optim.lr_scheduler.StepLR(
                 self.model_optimizer, self.scheduler_step_size, 0.5)
+            self.silog_criterion = silog_loss(variance_focus=self.opt.variance_focus)
             
     def process_batch(self, inputs, is_val = False):
         """Pass a minibatch through the network and generate images and losses
@@ -97,7 +98,8 @@ class Mp_trainer(Trainer):
             print(outputs["time"], outputs["mem"])
             
         outputs["depth"] = pred
-        losses["loss"] = L1_mask(gt, pred, gt_mask)
+        # losses["loss"] = L1_mask(gt, pred, gt_mask)
+        losses["loss"] = self.silog_criterion.forward(pred, gt, gt_mask)
 
         return outputs, losses
 
@@ -307,7 +309,6 @@ class Mp_trainer(Trainer):
         print_string = ">>> [Test] RMSE {:.4f} | REL {:.4f} | d1: {:.4f} | d2: {:.4f} | d3: {:.4f} "
         print(print_string.format(fin[0], fin[4], fin[5], fin[6], fin[7]))
         exit()
-        
     
     
 from options import Options

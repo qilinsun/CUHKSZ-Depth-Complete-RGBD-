@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib as mpl
 import matplotlib.cm as cm
 import torch
+import torch.nn as nn
 
 def cmap_mapping(disp_resized, cmap = 'jet', max = None):
     """Rescale image pixels to span range [0, 1]
@@ -110,6 +111,15 @@ def L1_mask(gt, pred, mask, return_map = False):
         return loss.mean(), torch.abs(gt - pred) * m 
     else: 
         return loss.mean()
+    
+class silog_loss(nn.Module):
+    def __init__(self, variance_focus):
+        super(silog_loss, self).__init__()
+        self.variance_focus = variance_focus
+
+    def forward(self, depth_est, depth_gt, mask):
+        d = torch.log(depth_est[mask]) - torch.log(depth_gt[mask])
+        return torch.sqrt((d ** 2).mean() - self.variance_focus * (d.mean() ** 2)) * 10.0
 
 ## Reference : https://github.com/zzangjinsun/NLSPN_ECCV20
 def evaluate(gt_, pred_, loss, is_test = False):

@@ -97,6 +97,9 @@ raw depth
 ![](pred_dep_fzynW3qQPVF_23f90479f2cf4c60bc78cb3252fe64e8_d1_1_2.png)
 ![](GT_depth_fzynW3qQPVF_23f90479f2cf4c60bc78cb3252fe64e8_d1_1_2.png)
 
+![](raw_dep_5ZKStnWn8Zo_4c90d6eff5534ef5a18642fad9622e28_d1_2_3.png)
+![](pred_dep_5ZKStnWn8Zo_4c90d6eff5534ef5a18642fad9622e28_d1_2_3.png)
+![](GT_depth_5ZKStnWn8Zo_4c90d6eff5534ef5a18642fad9622e28_d1_2_3.png)
 
 Evaluation Metrics:
 
@@ -106,11 +109,9 @@ RMSE(root mean squared error): 0.8952
 
 REL(relative mean absolute error): 0.6498 
 
-percentages δx of inlier pixels with the less than x meters error
 
-d1: 0.8487 | d2: 0.9068 | d3: 0.9308 
 
-问题1： 按paper里的说法他训练了50epoch,每20epoch调整一次learning rate。但我这里实验的时候训练很快就训练不动了。不知道可能的原因是什么
+问题1： paper中训练50epoch,每20epoch调整一次learning 。实验的时候训练5-10epoch loss 不再下降。
 
 问题3：对于大片缺失的深度图（如下图），预测结果差
 
