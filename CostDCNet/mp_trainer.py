@@ -50,8 +50,8 @@ class Mp_trainer(Trainer):
         # Train Mode
         if not self.is_eval:
             # Optimizer
-            self.learning_rate = 0.00025
-            self.scheduler_step_size = 5
+            self.learning_rate = 0.0001
+            self.scheduler_step_size = 10
             self.model_optimizer = torch.optim.Adam(self.parameters_to_train, self.learning_rate)
             self.model_lr_scheduler = torch.optim.lr_scheduler.StepLR(
                 self.model_optimizer, self.scheduler_step_size, 0.5)
@@ -72,7 +72,8 @@ class Mp_trainer(Trainer):
         dep = inputs["depth"]
         mask = inputs["mask"]
         gt = inputs["render_depth"]
-        gt_mask = inputs["gt_mask"]
+        # gt_mask = inputs["gt_mask"]
+        gt_mask = gt>0
         if self.opt.time:
             torch.cuda.synchronize()
             before_op_time = time.time()
@@ -99,7 +100,7 @@ class Mp_trainer(Trainer):
             
         outputs["depth"] = pred
         # losses["loss"] = L1_mask(gt, pred, gt_mask)
-        losses["loss"] = self.silog_criterion.forward(pred, gt, gt_mask)
+        losses["loss"] = self.silog_criterion.forward(pred, gt, gt_mask.to(torch.bool))
 
         return outputs, losses
 

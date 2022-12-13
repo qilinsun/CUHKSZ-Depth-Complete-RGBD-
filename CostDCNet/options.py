@@ -10,7 +10,7 @@ class Options:
         self.parser.add_argument("--batch_size", type=int, help="batch size", default=16)
         self.parser.add_argument("--num_workers", type=int, help="number of dataloader workers", default=8)
         self.parser.add_argument("--log_frequency", type=int, help="number of batches between each tensorboard log", default=250)
-        self.parser.add_argument("--save_frequency", type=int, help="number of epochs between each save", default=2)
+        self.parser.add_argument("--save_frequency", type=int, help="number of epochs between each save", default=5)
 
         self.parser.add_argument('--gpu', type=int, default = 0, help='gpu id')
         self.parser.add_argument("--data_path", type=str, default = '/data/tong/matterport', help="path of dataset")

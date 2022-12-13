@@ -19,7 +19,7 @@ class Trainer:
         # self.log_path = os.path.join("./runs", self.opt.name)
         now = time.strftime("%Y%m%d_%H%M%S", time.localtime())
         model_name = f'crnn_{now}'  
-        self.log_path = os.path.join("./runs", model_name)
+        self.log_path = os.path.join("./CostDCNet/runs", model_name)
         
         GPU_NUM = self.opt.gpu
         self.device = torch.device(f'cuda:{GPU_NUM}' if torch.cuda.is_available() else 'cpu')
