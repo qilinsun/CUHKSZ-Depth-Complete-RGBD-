@@ -84,22 +84,22 @@ image size : 320*256
 
 
 训练10 epoch
-![loss](10_loss.png)
+![loss](./l1_loss/10_loss.png)
 
 调整学习率后继续训练20epoch
-![loss](loss.png)
+![loss](./l1_loss/loss.png)
 
 
 结果
 raw depth
 
-![](raw_dep_fzynW3qQPVF_23f90479f2cf4c60bc78cb3252fe64e8_d1_1_2.png)
-![](pred_dep_fzynW3qQPVF_23f90479f2cf4c60bc78cb3252fe64e8_d1_1_2.png)
-![](GT_depth_fzynW3qQPVF_23f90479f2cf4c60bc78cb3252fe64e8_d1_1_2.png)
+![](./l1_loss/raw_dep_fzynW3qQPVF_23f90479f2cf4c60bc78cb3252fe64e8_d1_1_2.png)
+![](./l1_loss/pred_dep_fzynW3qQPVF_23f90479f2cf4c60bc78cb3252fe64e8_d1_1_2.png)
+![](./l1_loss/GT_depth_fzynW3qQPVF_23f90479f2cf4c60bc78cb3252fe64e8_d1_1_2.png)
 
-![](raw_dep_5ZKStnWn8Zo_4c90d6eff5534ef5a18642fad9622e28_d1_2_3.png)
-![](pred_dep_5ZKStnWn8Zo_4c90d6eff5534ef5a18642fad9622e28_d1_2_3.png)
-![](GT_depth_5ZKStnWn8Zo_4c90d6eff5534ef5a18642fad9622e28_d1_2_3.png)
+![](./l1_loss/raw_dep_5ZKStnWn8Zo_4c90d6eff5534ef5a18642fad9622e28_d1_2_3.png)
+![](./l1_loss/pred_dep_5ZKStnWn8Zo_4c90d6eff5534ef5a18642fad9622e28_d1_2_3.png)
+![](./l1_loss/GT_depth_5ZKStnWn8Zo_4c90d6eff5534ef5a18642fad9622e28_d1_2_3.png)
 
 Evaluation Metrics:
 
