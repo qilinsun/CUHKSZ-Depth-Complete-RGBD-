@@ -156,3 +156,41 @@ raw depth
 <center class="half">
     <img src="data0929_img/pred_dep_frame-000008_7.png" width="450"/><img src="data0929_img/raw_dep_frame-000008_7.png" width="450"/>
 </center>
+
+
+## 2022/12/14
+
+1. 使用silog loss in "NeW CRFs: Neural Window Fully-connected CRFs for Monocular Depth Estimation"
+
+    $$ L = \alpha\sqrt{\frac{1}{K}\sum_i{\Delta d_i^2} - \frac{\lambda}{K^2}(\sum_i{\Delta d_i})^2}$$
+
+    where $\Delta d_i = \log{\hat{d_i}} - \log{d_i^*}$. $\hat{d_i}$ is the predicted depth value and $d_i^*$ is the ground truth depth value.
+
+    $\lambda$ is a variance minimizing factor, and $\alpha$ is a scale constant. In this experiment, $\lambda$ is set to 0.85 and $\alpha$ is set to 10.
+
+The result is as follows:
+
+silog loss
+
+![](./silog_loss/raw_dep_fzynW3qQPVF_23f90479f2cf4c60bc78cb3252fe64e8_d1_1_8.png)
+![](./silog_loss/pred_dep_fzynW3qQPVF_23f90479f2cf4c60bc78cb3252fe64e8_d1_1_8.png)
+![](./silog_loss/GT_depth_fzynW3qQPVF_23f90479f2cf4c60bc78cb3252fe64e8_d1_1_8.png)
+
+l1 loss
+
+![](./l1_loss/raw_dep_fzynW3qQPVF_23f90479f2cf4c60bc78cb3252fe64e8_d1_1_2.png)
+![](./l1_loss/pred_dep_fzynW3qQPVF_23f90479f2cf4c60bc78cb3252fe64e8_d1_1_2.png)
+![](./l1_loss/GT_depth_fzynW3qQPVF_23f90479f2cf4c60bc78cb3252fe64e8_d1_1_2.png)
+
+silog loss
+
+![](./silog_loss/raw_dep_5ZKStnWn8Zo_4c90d6eff5534ef5a18642fad9622e28_d1_2_5.png)
+![](./silog_loss/pred_dep_5ZKStnWn8Zo_4c90d6eff5534ef5a18642fad9622e28_d1_2_5.png)
+![](./silog_loss/GT_depth_5ZKStnWn8Zo_4c90d6eff5534ef5a18642fad9622e28_d1_2_5.png)
+
+l1 loss
+
+![](./l1_loss/raw_dep_5ZKStnWn8Zo_4c90d6eff5534ef5a18642fad9622e28_d1_2_3.png)
+![](./l1_loss/pred_dep_5ZKStnWn8Zo_4c90d6eff5534ef5a18642fad9622e28_d1_2_3.png)
+![](./l1_loss/GT_depth_5ZKStnWn8Zo_4c90d6eff5534ef5a18642fad9622e28_d1_2_3.png)
+
