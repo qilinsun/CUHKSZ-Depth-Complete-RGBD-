@@ -47,6 +47,8 @@ class Mp_trainer(Trainer):
 
         self.z_step = self.opt.max/(self.opt.res-1)
         
+        self.silog_criterion = silog_loss(variance_focus=self.opt.variance_focus)
+        self.gradient_loss = GradientLoss()
         # Train Mode
         if not self.is_eval:
             # Optimizer
@@ -55,7 +57,6 @@ class Mp_trainer(Trainer):
             self.model_optimizer = torch.optim.Adam(self.parameters_to_train, self.learning_rate)
             self.model_lr_scheduler = torch.optim.lr_scheduler.StepLR(
                 self.model_optimizer, self.scheduler_step_size, 0.5)
-            self.silog_criterion = silog_loss(variance_focus=self.opt.variance_focus)
             
     def process_batch(self, inputs, is_val = False):
         """Pass a minibatch through the network and generate images and losses
@@ -100,8 +101,11 @@ class Mp_trainer(Trainer):
             
         outputs["depth"] = pred
         # losses["loss"] = L1_mask(gt, pred, gt_mask)
-        losses["loss"] = self.silog_criterion.forward(pred, gt, gt_mask.to(torch.bool))
-
+        # losses["loss"] = self.silog_criterion.forward(pred, gt, gt_mask.to(torch.bool))
+        l1_loss = L1_mask(gt, pred, gt_mask)
+        gradient_loss = self.gradient_loss(pred, gt)
+        
+        losses["loss"] = l1_loss + 0.7 * gradient_loss / (gradient_loss / l1_loss).detach()
         return outputs, losses
 
     def depth2MDP(self, dep):
@@ -203,7 +207,7 @@ class Mp_trainer(Trainer):
         if not os.path.exists(dir):
             os.makedirs(dir)
 
-        for j in range(min(4, self.opt.batch_size)):  # write a maxmimum of four images
+        for j in range(min(len(inputs['depth']), self.opt.batch_size)):  # write a maxmimum of four images
             GT_dep = inputs["render_depth"][j].clone().detach()
             pred_dep = outputs["depth"][j].clone().detach()
             raw_dep = inputs["depth"][j].clone().detach()

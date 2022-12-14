@@ -1,4 +1,4 @@
-from CostDCNet.data0929_evaler import Data0929_trainer
+from data0929_evaler import Data0929_trainer
 from options import Options
 
 options = Options()

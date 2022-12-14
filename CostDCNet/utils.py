@@ -4,6 +4,7 @@ import matplotlib as mpl
 import matplotlib.cm as cm
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 def cmap_mapping(disp_resized, cmap = 'jet', max = None):
     """Rescale image pixels to span range [0, 1]
@@ -120,6 +121,52 @@ class silog_loss(nn.Module):
     def forward(self, depth_est, depth_gt, mask):
         d = torch.log(depth_est[mask]) - torch.log(depth_gt[mask])
         return torch.sqrt((d ** 2).mean() - self.variance_focus * (d.mean() ** 2)) * 10.0
+    
+class GradientLoss(nn.Module):
+
+    def __init__(self):
+        super(GradientLoss, self).__init__()
+        self.depth_valid1 = 0.0
+
+    def forward(self, sr, hr):
+    
+        mask1 = (hr > self.depth_valid1).type_as(sr).detach()
+        
+        km = torch.Tensor([[1, 1, 1], 
+                           [1, 1, 1],
+                           [1, 1, 1]]).view(1, 1, 3, 3).to(hr)
+        # km = torch.Tensor([[1, 1, 1, 1, 1], 
+        #                    [1, 1, 1, 1, 1],
+        #                    [1, 1, 1, 1, 1],
+        #                    [1, 1, 1, 1, 1],
+        #                    [1, 1, 1, 1, 1]]).view(1, 1, 5, 5).to(hr)
+        
+        kx = torch.Tensor([[1, 0, -1], [2, 0, -2],
+                           [1, 0, -1]]).view(1, 1, 3, 3).to(hr)
+        ky = torch.Tensor([[1, 2, 1], [0, 0, 0],
+                           [-1, -2, -1]]).view(1, 1, 3, 3).to(hr)
+
+        erode = F.conv2d(mask1, km, padding=1)
+        # erode = F.conv2d(mask1, km, padding=2)
+        mask1_erode = (erode == 9).type_as(sr).detach()
+        # mask1_erode = (erode == 25).type_as(sr).detach()
+        pred_grad_x = F.conv2d(sr, kx, padding=1)
+        pred_grad_y = F.conv2d(sr, ky, padding=1)
+        target_grad_x = F.conv2d(hr, kx, padding=1)
+        target_grad_y = F.conv2d(hr, ky, padding=1)
+        
+        d = torch.abs(pred_grad_x - target_grad_x) * mask1_erode 
+        d = torch.sum(d, dim=[1, 2, 3])
+        num_valid = torch.sum(mask1_erode, dim=[1, 2, 3])
+        loss_x = d / (num_valid + 1e-8)
+
+        d = torch.abs(pred_grad_y - target_grad_y) * mask1_erode 
+        d = torch.sum(d, dim=[1, 2, 3])
+        num_valid = torch.sum(mask1_erode, dim=[1, 2, 3])
+        loss_y = d / (num_valid + 1e-8)
+        
+        loss = loss_x.sum() + loss_y.sum()
+        return loss
 
 ## Reference : https://github.com/zzangjinsun/NLSPN_ECCV20
 def evaluate(gt_, pred_, loss, is_test = False):
