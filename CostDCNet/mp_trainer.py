@@ -36,6 +36,7 @@ class Mp_trainer(Trainer):
         self.models["enc3d"]  = Encoder3D(1, 16, D= 3, planes=(32, 48, 64)) 
         self.models["unet3d"] = UNet3D(32, self.opt.up_scale**2, f_maps=[32, 48, 64, 80], mode="nearest")
         
+        
         if self.opt.load_model:
             self.load_model()
         
@@ -53,10 +54,12 @@ class Mp_trainer(Trainer):
         if not self.is_eval:
             # Optimizer
             self.learning_rate = 0.0001
-            self.scheduler_step_size = 10
+            self.scheduler_step_size = 5
             self.model_optimizer = torch.optim.Adam(self.parameters_to_train, self.learning_rate)
             self.model_lr_scheduler = torch.optim.lr_scheduler.StepLR(
                 self.model_optimizer, self.scheduler_step_size, 0.5)
+            if self.opt.load_model:
+                self.load_optimizer()
             
     def process_batch(self, inputs, is_val = False):
         """Pass a minibatch through the network and generate images and losses
@@ -266,15 +269,16 @@ class Mp_trainer(Trainer):
             model_dict.update(pretrained_dict)
             self.models[n].load_state_dict(model_dict)
 
-        # loading adam state
-        # optimizer_load_path = os.path.join(self.opt.weight_path, "adam.pth")
-        # if os.path.isfile(optimizer_load_path):
-        #     print("Loading Adam weights")
-        #     optimizer_dict = torch.load(optimizer_load_path)
-        #     self.model_optimizer.load_state_dict(optimizer_dict)
-        # else:
-        #     print("Cannot find Adam weights so Adam is randomly initialized")
     
+    def load_optimizer(self):
+        # loading adam state
+        optimizer_load_path = os.path.join(self.opt.weight_path, "adam.pth")
+        if os.path.isfile(optimizer_load_path):
+            print("Loading Adam weights")
+            optimizer_dict = torch.load(optimizer_load_path)
+            self.model_optimizer.load_state_dict(optimizer_dict)
+        else:
+            print("Cannot find Adam weights so Adam is randomly initialized")
     
     def evaluate(self, is_offline= False):
         """Run the entire training pipeline

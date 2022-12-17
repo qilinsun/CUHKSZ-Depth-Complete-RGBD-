@@ -171,7 +171,8 @@ class Data0929_trainer(Trainer):
                 num_workers=self.opt.num_workers, pin_memory=False, drop_last=False,
                 collate_fn = customed_collate_fn(self.dataset_name))
             
-        test_data_path = os.path.join(self.data_path, 'test')
+        # test_data_path = os.path.join(self.data_path, 'test')
+        test_data_path = self.data_path
         test_dataset = self.dataset(test_data_path, train = False)
         self.val_loader = DataLoader(
             test_dataset, self.opt.batch_size, True,

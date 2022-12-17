@@ -3,8 +3,8 @@ import cv2
 import numpy as np
 import os
 
-PATH = "depth"
-out_PATH = "origin_scale_dep"
+PATH = "./gallary/eval_gallary/gallary_silog_data0929/eval/0"
+out_PATH = "./gallary/eval_gallary/gallary_silog_data0929/scale"
 
 depth_names = os.listdir(PATH)
 depth_paths = [os.path.join(PATH, depth_name) for depth_name in depth_names]

@@ -102,7 +102,7 @@ class Trainer:
 
             # log less frequently after the first 2000 steps to save time & disk space
             early_phase = batch_idx % self.opt.log_frequency == 0 and self.step < 2000
-            late_phase = self.step % 2000 == 0
+            late_phase = self.step % 500 == 0
             if (batch_idx % 10 == 0):
                 self.log_time(batch_idx, duration, losses["loss"].cpu().data)
             if early_phase or late_phase:

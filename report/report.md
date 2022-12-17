@@ -168,7 +168,7 @@ raw depth
 
     $\lambda$ is a variance minimizing factor, and $\alpha$ is a scale constant. In this experiment, $\lambda$ is set to 0.85 and $\alpha$ is set to 10.
 
-The result is as follows:
+训练输入：
 
 silog loss
 
@@ -212,7 +212,7 @@ result are as follows
 train in 16-batch size 
 
 ![](gradientloss/gradient_16batch.png)
-
+·
 train in 4-barch size
 
 ![](gradientloss/gradientloss1.png)
@@ -227,7 +227,7 @@ train in 4-barch size
 </center>
 
 <center class="half">
-    <img src="gradientloss/scale_dep/pred_dep_frame-0000012_0.png" width="450"/><img src="gradientloss/scale_dep/raw_dep_frame-0000012_0.png" width="450"/>
+    <img src="gradientloss/scale_dep/pred_dep_frame-000012_0.png" width="450"/><img src="gradientloss/scale_dep/raw_dep_frame-000012_0.png" width="450"/>
 </center>
 
 <center class="half">
@@ -237,3 +237,6 @@ train in 4-barch size
 <center class="half">
     <img src="gradientloss/scale_dep/pred_dep_frame-000006_0.png" width="450"/><img src="gradientloss/scale_dep/raw_dep_frame-000006_0.png" width="450"/>
 </center>
+
+1. 流程 ： 输入： 深度 rgb 输出
+2. ppt ： 背景 输入输出 对比 结果
