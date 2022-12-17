@@ -194,3 +194,17 @@ l1 loss
 ![](./l1_loss/pred_dep_5ZKStnWn8Zo_4c90d6eff5534ef5a18642fad9622e28_d1_2_3.png)
 ![](./l1_loss/GT_depth_5ZKStnWn8Zo_4c90d6eff5534ef5a18642fad9622e28_d1_2_3.png)
 
+## 2022/12/17
+
+### Gradient Loss
+
+Use Gradient loss proposed by Learning an Efficient Multimodal Depth
+Completion Model.
+
+$$
+L_{cgdl}(\hat{Y}, Y) = ||F(\hat{Y}) - F(Y)||_p * E(sgn(Y\in v))\\
+
+L(\hat{Y}, Y) = L_{l1}(\hat{Y}, Y) + \lambda*L_{cgdl}(\hat{Y}, Y)
+$$
+
+result are as follows
