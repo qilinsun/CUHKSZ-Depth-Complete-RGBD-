@@ -102,12 +102,14 @@ $\lambda$ is a variance minimizing factor, and $\alpha$ is a scale constant. In 
 K is the number of valid depth values in GT depth image.
 
 ## Training Input and Output From Matterport Dataset
+### RGB image, Raw Depth image, Predicted Image and GT image.
 
 ![](silog_loss/matterport/combine/4c90d6eff5534ef5a18642fad9622e28_i1_2.jpg)
 ![](silog_loss/matterport/combine/23f90479f2cf4c60bc78cb3252fe64e8_i1_1.jpg)
 
 
 ## Testing Input and Output of Our data
+### RGB image, Raw Depth image, Predicted Image
 
 ![](silog_loss/ourdata/combine/frame-000000.png)
 ![](silog_loss/ourdata/combine/frame-000001.png)
@@ -128,6 +130,7 @@ $$L(\hat{Y}, Y) = L_{l1}(\hat{Y}, Y) + \lambda*L_{cgdl}(\hat{Y}, Y)$$
 $L_{cgdl}$ is corrected gradient loss. $\hat{Y}$ is the ground truth depth. $Y$ is the predicted depth.
 
 ## Training Input and Output
+### RGB image, Raw Depth image, Predicted Image and GT image.
 
 ![](batchsize_16_gradientloss/matterport/combine/5ZKStnWn8Zo_4c90d6eff5534ef5a18642fad9622e28_d1_2.png)
 ![](batchsize_16_gradientloss/matterport/combine/fzynW3qQPVF_23f90479f2cf4c60bc78cb3252fe64e8_d1_1.png)
@@ -138,6 +141,7 @@ $L_{cgdl}$ is corrected gradient loss. $\hat{Y}$ is the ground truth depth. $Y$ 
 Testing Metrics RMSE 0.8773 | REL 0.6531 | d1: 0.8479 | d2: 0.9085 | d3: 0.9318
 
 ## Ourdata
+### RGB image, Raw Depth image, Predicted Image
 
 ![](batchsize_16_gradientloss/ourdata/combine/frame-000000.png)
 ![](batchsize_16_gradientloss/ourdata/combine/frame-000001.png)
