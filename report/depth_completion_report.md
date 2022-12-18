@@ -122,11 +122,9 @@ K is the number of valid depth values in GT depth image.
 Use Gradient loss proposed by Learning an Efficient Multimodal Depth
 Completion Model.
 
-$$
-L_{cgdl}(\hat{Y}, Y) = ||F(\hat{Y}) - F(Y)||_p * E(sgn(Y\in v))\\
+$$L_{cgdl}(\hat{Y}, Y) = ||F(\hat{Y}) - F(Y)||_p * E(sgn(Y\in v))$$
 
-L(\hat{Y}, Y) = L_{l1}(\hat{Y}, Y) + \lambda*L_{cgdl}(\hat{Y}, Y)
-$$
+$$L(\hat{Y}, Y) = L_{l1}(\hat{Y}, Y) + \lambda*L_{cgdl}(\hat{Y}, Y)$$
 
 $L_{cgdl}$ is corrected gradient loss. $\hat{Y}$ is the ground truth depth. $Y$ is the predicted depth.
 
