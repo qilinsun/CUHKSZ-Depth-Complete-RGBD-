@@ -58,12 +58,35 @@ Every depth image a `16` bit `PNG`. Depth scale $1000$, `1mm` per value (divide 
 
 </center>
 
-# Data Preprocessing
+
+# Training Pipeline
+![pipeline](pipeline.jpg)
+
+## Data Preprocessing
 
 1. In training stage, Matterport Ground Truth depth and Raw Depth are dvided by 4000(convert to get meters). In evaluating stage, our data's groud truth depth and raw depth are diveded by 1000 to get meters.
 2. RGB image are normalized to 0~1, (divided by 255).
 
+## RGB-D Feature Volume Construction
 
+RGB-D feature volume construction has two branches in order to extracting 2D and 3D feature maps from input RGB-D image.
+
+1. 3D feature map extraction needs a 3D encoder. Thus, the input depth image is converted into a Multiple Depth Plane. In experiment, the number of depth plane are chosen to be `16` and maximum depth are chosen to be `15`. A sparse 3D convolution is applied to the Multiple Depth Plane to compute features only for valid 3D points with depth vaue > 0.
+
+2. To obtain 2D feature map, we need to concatenate depth image and RGB image, then feed into a 2D encoder.
+
+3. RGB-D feature volume are constructed based on the 3D feature map and 2D feature map. 
+
+## Cost Volume Prediction
+
+Based on the RGB-D Volume, a cost volume is obtained by feeding RGB-D feature volume ino a 3D UNet. Then Per plane pixel-shuffle is applied to upsample the cost volume to restore the original resolution.
+
+## Depth Regression
+
+We can regress a completed depth map $D^′(·)$ by applying the softmax operator $\sigma( · )$ to the upsampled cost volume $V_c \in \mathbb{R}^{W ×H×K}$ along the depth-axis and using the following equation
+$$D^′(x, y) =\sum^K_{k=1}d_k × p^k_{x,y} $$
+$$p_{x,y} = \sigma(V_c(x, y, :))$$
+where $d_k$ is the predefined depth value of the k-th plane, (x, y) is an image pixel position, K is the number of depth planes, $V_c(x, y, :)$ is a K-dimensional vector along the depth-axis within the cost volume, and px,y is a probability vector obtained by the softmax operator σ( · ) for K depth planes at (x, y).
 # Training using Silog Loss:
 
 ## Silog Loss
@@ -108,6 +131,11 @@ $L_{cgdl}$ is corrected gradient loss. $\hat{Y}$ is the ground truth depth. $Y$ 
 
 ![](batchsize_16_gradientloss/matterport/combine/5ZKStnWn8Zo_4c90d6eff5534ef5a18642fad9622e28_d1_2.png)
 ![](batchsize_16_gradientloss/matterport/combine/fzynW3qQPVF_23f90479f2cf4c60bc78cb3252fe64e8_d1_1.png)
+![](batchsize_16_gradientloss/matterport/combine/UwV83HsGsw3_53abab7fbeff4b61842d457eff7406ce_d1_4.png)
+![](batchsize_16_gradientloss/matterport/combine/gxdoqLR6rwA_142124e9a2c84be59a8facb7db858a53_d1_0.png)
+![](batchsize_16_gradientloss/matterport/combine/fzynW3qQPVF_7f4f8df6c0de4998992a5f1951a1bb64_d1_3.png)
+
+Testing Metrics RMSE 0.8773 | REL 0.6531 | d1: 0.8479 | d2: 0.9085 | d3: 0.9318
 
 ## Ourdata
 
