@@ -117,7 +117,7 @@ K is the number of valid depth values in GT depth image.
 </center>
 
 
-# Training Using L1 loss + gradient loss
+# Training Using L1 loss + gradient loss (Training in Progress)
 
 Use Gradient loss proposed by Learning an Efficient Multimodal Depth
 Completion Model.
