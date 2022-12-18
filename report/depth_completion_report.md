@@ -80,42 +80,18 @@ K is the number of valid depth values in GT depth image.
 
 ## Training Input and Output From Matterport Dataset
 
-<center class="half">
-    <img src="silog_loss/matterport/resize_23f90479f2cf4c60bc78cb3252fe64e8_i1_1.jpg" width="300"/><img src="silog_loss/matterport/raw_dep_fzynW3qQPVF_23f90479f2cf4c60bc78cb3252fe64e8_d1_1_8.png" width="300"/><img src="silog_loss/matterport/pred_dep_fzynW3qQPVF_23f90479f2cf4c60bc78cb3252fe64e8_d1_1_8.png" width="300"/><img src="silog_loss/matterport/GT_depth_fzynW3qQPVF_23f90479f2cf4c60bc78cb3252fe64e8_d1_1_8.png" width="300"/>
-</center>
-
-<center class="half">
-    <img src="silog_loss/matterport/resize_4c90d6eff5534ef5a18642fad9622e28_i1_2.jpg" width="300"/><img src="silog_loss/matterport/raw_dep_5ZKStnWn8Zo_4c90d6eff5534ef5a18642fad9622e28_d1_2_5.png" width="300"/><img src="silog_loss/matterport/pred_dep_5ZKStnWn8Zo_4c90d6eff5534ef5a18642fad9622e28_d1_2_5.png" width="300"/><img src="silog_loss/matterport/GT_depth_5ZKStnWn8Zo_4c90d6eff5534ef5a18642fad9622e28_d1_2_5.png" width="300"/>
-
-</center>
+![](silog_loss/matterport/combine/4c90d6eff5534ef5a18642fad9622e28_i1_2.jpg)
+![](silog_loss/matterport/combine/23f90479f2cf4c60bc78cb3252fe64e8_i1_1.jpg)
 
 
 ## Testing Input and Output of Our data
 
-<center class="half">
-    <img src="silog_loss/ourdata/color_frame-000000.png" width="300"/><img src="silog_loss/ourdata/raw_dep_frame-000000.png" width="300"/><img src="silog_loss/ourdata/pred_dep_frame-000000.png" width="300"/>
-</center>
+![](silog_loss/ourdata/combine/frame-000000.png)
+![](silog_loss/ourdata/combine/frame-000001.png)
+![](silog_loss/ourdata/combine/frame-000002.png)
+![](silog_loss/ourdata/combine/frame-000003.png)
 
-<center class="half">
-    <img src="silog_loss/ourdata/color_frame-000001.png" width="300"/><img src="silog_loss/ourdata/raw_dep_frame-000001.png" width="300"/><img src="silog_loss/ourdata/pred_dep_frame-000001.png" width="300"/>
-</center>
-
-<center class="half">
-    <img src="silog_loss/ourdata/color_frame-000002.png" width="300"/><img src="silog_loss/ourdata/raw_dep_frame-000002.png" width="300"/><img src="silog_loss/ourdata/pred_dep_frame-000002.png" width="300"/>
-</center>
-
-<center class="half">
-    <img src="silog_loss/ourdata/color_frame-000003.png" width="300"/><img src="silog_loss/ourdata/raw_dep_frame-000003.png" width="300"/><img src="silog_loss/ourdata/pred_dep_frame-000003.png" width="300"/>
-</center>
-
-<center class="half">
-    <img src="silog_loss/ourdata/color_frame-000004.png" width="300"/><img src="silog_loss/ourdata/raw_dep_frame-000004.png" width="300"/><img src="silog_loss/ourdata/pred_dep_frame-000004.png" width="300"/>
-</center>
-
-<center class="half">
-    <img src="silog_loss/ourdata/color_frame-000005.png" width="300"/><img src="silog_loss/ourdata/raw_dep_frame-000005.png" width="300"/><img src="silog_loss/ourdata/pred_dep_frame-000005.png" width="300"/>
-</center>
-
+more result: see [silog_loss result on our data](silog_loss/ourdata/combine/)
 
 # Training Using L1 loss + gradient loss (Training in Progress)
 
@@ -140,12 +116,6 @@ $L_{cgdl}$ is corrected gradient loss. $\hat{Y}$ is the ground truth depth. $Y$ 
 ![](batchsize_16_gradientloss/ourdata/combine/frame-000002.png)
 ![](batchsize_16_gradientloss/ourdata/combine/frame-000003.png)
 
-<<<<<<< HEAD
+
 more result: see [gradient_loss result on our data](batchsize_16_gradientloss/ourdata/combine/)
-=======
-<center class="half">
-    <img src="batchsize_16_gradientloss/ourdata/scale/color_frame-000005.png" width="400"/>
-    <img src="batchsize_16_gradientloss/ourdata/scale/raw_dep_frame-000005.png" width="400"/>
-    <img src="batchsize_16_gradientloss/ourdata/scale/pred_dep_frame-000005.png" width="400"/>
-</center>
->>>>>>> 4c711b779a3c240c64b477c90dc2f72ec3255f5f
+
