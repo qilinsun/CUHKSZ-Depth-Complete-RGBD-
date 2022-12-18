@@ -219,23 +219,23 @@ train in 4-barch size
 ![](gradientloss/gradientloss2.png)
 
 <center class="half">
-    <img src="gradientloss/scale_dep/pred_dep_frame-000008_0.png" width="450"/><img src="gradientloss/scale_dep/raw_dep_frame-000008_0.png" width="450"/>
+    <img src="batchsize_4_gradientloss/scale_dep/pred_dep_frame-000008_0.png" width="450"/><img src="batchsize_4_gradientloss/scale_dep/raw_dep_frame-000008_0.png" width="450"/>
 </center>
 
 <center class="half">
-    <img src="gradientloss/scale_dep/pred_dep_frame-000002_0.png" width="450"/><img src="gradientloss/scale_dep/raw_dep_frame-000002_0.png" width="450"/>
+    <img src="batchsize_4_gradientloss/scale_dep/pred_dep_frame-000002_0.png" width="450"/><img src="batchsize_4_gradientloss/scale_dep/raw_dep_frame-000002_0.png" width="450"/>
 </center>
 
 <center class="half">
-    <img src="gradientloss/scale_dep/pred_dep_frame-000012_0.png" width="450"/><img src="gradientloss/scale_dep/raw_dep_frame-000012_0.png" width="450"/>
+    <img src="batchsize_4_gradientloss/scale_dep/pred_dep_frame-000012_0.png" width="450"/><img src="batchsize_4_gradientloss/scale_dep/raw_dep_frame-000012_0.png" width="450"/>
 </center>
 
 <center class="half">
-    <img src="gradientloss/scale_dep/pred_dep_frame-000015_0.png" width="450"/><img src="gradientloss/scale_dep/raw_dep_frame-000015_0.png" width="450"/>
+    <img src="batchsize_4_gradientloss/scale_dep/pred_dep_frame-000015_0.png" width="450"/><img src="batchsize_4_gradientloss/scale_dep/raw_dep_frame-000015_0.png" width="450"/>
 </center>
 
 <center class="half">
-    <img src="gradientloss/scale_dep/pred_dep_frame-000006_0.png" width="450"/><img src="gradientloss/scale_dep/raw_dep_frame-000006_0.png" width="450"/>
+    <img src="batchsize_4_gradientloss/scale_dep/pred_dep_frame-000006_0.png" width="450"/><img src="batchsize_4_gradientloss/scale_dep/raw_dep_frame-000006_0.png" width="450"/>
 </center>
 
 1. 流程 ： 输入： 深度 rgb 输出
