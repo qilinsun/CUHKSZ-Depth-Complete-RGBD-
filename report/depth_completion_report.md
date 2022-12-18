@@ -130,51 +130,14 @@ $L_{cgdl}$ is corrected gradient loss. $\hat{Y}$ is the ground truth depth. $Y$ 
 
 ## Training Input and Output
 
-<center class="half">
-    <img src="batchsize_16_gradientloss/matterport/color_5ZKStnWn8Zo_4c90d6eff5534ef5a18642fad9622e28_d1_2.png" width="300"/>
-    <img src="batchsize_16_gradientloss/matterport/raw_dep_5ZKStnWn8Zo_4c90d6eff5534ef5a18642fad9622e28_d1_2.png" width="300"/>
-    <img src="batchsize_16_gradientloss/matterport/pred_dep_5ZKStnWn8Zo_4c90d6eff5534ef5a18642fad9622e28_d1_2.png" width="300"/>
-    <img src="batchsize_16_gradientloss/matterport/GT_depth_5ZKStnWn8Zo_4c90d6eff5534ef5a18642fad9622e28_d1_2.png" width="300"/>
-</center>
-
-<center class="half">
-    <img src="batchsize_16_gradientloss/matterport/color_fzynW3qQPVF_23f90479f2cf4c60bc78cb3252fe64e8_d1_1.png" width="300"/><img src="batchsize_16_gradientloss/matterport/raw_dep_fzynW3qQPVF_23f90479f2cf4c60bc78cb3252fe64e8_d1_1.png" width="300"/><img src="batchsize_16_gradientloss/matterport/pred_dep_fzynW3qQPVF_23f90479f2cf4c60bc78cb3252fe64e8_d1_1.png" width="300"/><img src="batchsize_16_gradientloss/matterport/GT_depth_fzynW3qQPVF_23f90479f2cf4c60bc78cb3252fe64e8_d1_1.png" width="300"/>
-
-</center>
+![](batchsize_16_gradientloss/matterport/combine/5ZKStnWn8Zo_4c90d6eff5534ef5a18642fad9622e28_d1_2.png)
+![](batchsize_16_gradientloss/matterport/combine/fzynW3qQPVF_23f90479f2cf4c60bc78cb3252fe64e8_d1_1.png)
 
 ## Ourdata
 
-<center class="half">
-    <img src="batchsize_16_gradientloss/ourdata/scale/color_frame-000000.png" width="400"/>
-    <img src="batchsize_16_gradientloss/ourdata/scale/raw_dep_frame-000000.png" width="400"/>
-    <img src="batchsize_16_gradientloss/ourdata/scale/pred_dep_frame-000000.png" width="400"/>
-</center>
-<center class="half">
-    <img src="batchsize_16_gradientloss/ourdata/scale/color_frame-000001.png" width="400"/>
-    <img src="batchsize_16_gradientloss/ourdata/scale/raw_dep_frame-000001.png" width="400"/>
-    <img src="batchsize_16_gradientloss/ourdata/scale/pred_dep_frame-000001.png" width="400"/>
-</center>
+![](batchsize_16_gradientloss/ourdata/combine/frame-000000.png)
+![](batchsize_16_gradientloss/ourdata/combine/frame-000001.png)
+![](batchsize_16_gradientloss/ourdata/combine/frame-000002.png)
+![](batchsize_16_gradientloss/ourdata/combine/frame-000003.png)
 
-<center class="half">
-    <img src="batchsize_16_gradientloss/ourdata/scale/color_frame-000002.png" width="400"/>
-    <img src="batchsize_16_gradientloss/ourdata/scale/raw_dep_frame-000002.png" width="400"/>
-    <img src="batchsize_16_gradientloss/ourdata/scale/pred_dep_frame-000002.png" width="400"/>
-</center>
-
-<center class="half">
-    <img src="batchsize_16_gradientloss/ourdata/scale/color_frame-000003.png" width="400"/>
-    <img src="batchsize_16_gradientloss/ourdata/scale/raw_dep_frame-000003.png" width="400"/>
-    <img src="batchsize_16_gradientloss/ourdata/scale/pred_dep_frame-000003.png" width="400"/>
-</center>
-
-<center class="half">
-    <img src="batchsize_16_gradientloss/ourdata/scale/color_frame-000004.png" width="400"/>
-    <img src="batchsize_16_gradientloss/ourdata/scale/raw_dep_frame-000004.png" width="400"/>
-    <img src="batchsize_16_gradientloss/ourdata/scale/pred_dep_frame-000004.png" width="400"/>
-</center>
-
-<center class="half">
-    <img src="batchsize_16_gradientloss/ourdata/scale/color_frame-000005.png" width="400"/>
-    <img src="batchsize_16_gradientloss/ourdata/scale/raw_dep_frame-000005.png" width="400"/>
-    <img src="batchsize_16_gradientloss/ourdata/scale/pred_dep_frame-000005.png" width="400"/>
-</center>
+more result: see [gradient_loss result on our data](batchsize_16_gradientloss/ourdata/combine/)
