@@ -117,7 +117,7 @@ K is the number of valid depth values in GT depth image.
 </center>
 
 
-# Training Using L1 loss + gradient loss
+# Training Using L1 loss + gradient loss (Training in Progress)
 
 Use Gradient loss proposed by Learning an Efficient Multimodal Depth
 Completion Model.
@@ -140,4 +140,12 @@ $L_{cgdl}$ is corrected gradient loss. $\hat{Y}$ is the ground truth depth. $Y$ 
 ![](batchsize_16_gradientloss/ourdata/combine/frame-000002.png)
 ![](batchsize_16_gradientloss/ourdata/combine/frame-000003.png)
 
+<<<<<<< HEAD
 more result: see [gradient_loss result on our data](batchsize_16_gradientloss/ourdata/combine/)
+=======
+<center class="half">
+    <img src="batchsize_16_gradientloss/ourdata/scale/color_frame-000005.png" width="400"/>
+    <img src="batchsize_16_gradientloss/ourdata/scale/raw_dep_frame-000005.png" width="400"/>
+    <img src="batchsize_16_gradientloss/ourdata/scale/pred_dep_frame-000005.png" width="400"/>
+</center>
+>>>>>>> 4c711b779a3c240c64b477c90dc2f72ec3255f5f
