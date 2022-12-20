@@ -216,12 +216,12 @@ without valid mask:
 with valid maskwith valid mask:
 
 | old_ssim | old_psnr | old mse |
-| ---  | ---  | ---  | ---  |
+| ---  | ---  | ---  | 
 |`0.999628`|`69.2222`| `0.05515` |
 
 
 | ssim | psnr | mse |
-| ---  | ---  | ---  | ---  |
+| ---  | ---  | ---  | 
 |`0.991639`|`52.4680`| `0.4256` |
 
 # Compare resize and original size
