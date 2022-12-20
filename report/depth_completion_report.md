@@ -162,10 +162,9 @@ more result: see [gradient_loss result on our data](batchsize_16_gradientloss/ou
 
 In paper, SSIM = 0.838
 
-mean SSIM = `0.8482394`
-
-mean PSNR = `16.567277`
-
+| ssim | psnr | mse |
+| ---  | ---  | --- |
+|`0.589550`| `40.7537`| `6.77883` |
 ### our data
 
 
@@ -173,15 +172,15 @@ compare the predicted depth with raw depth
 
 without valid mask:
 
-| ssim | psnr |
-| ---  | ---  |
-|`0.482178`| `8.743232`|
+| ssim | psnr | mse |
+| ---  | ---  | --- |
+|`0.589550`| `40.7537`| `6.77883` |
 
 with valid mask:
 
-| ssim | psnr |
-| ---  | ---  |
-|`0.995528`|`19.32136`|
+| ssim | psnr | mse |
+| ---  | ---  | --- |
+|`0.999628`|`69.2222`| `0.05515` |
 
 # After Resize the our image 
 
@@ -206,15 +205,24 @@ compare the predicted depth with raw depth
 
 without valid mask:
 
-| old_ssim | old_psnr | ssim | psnr |
-| --- | ---  | ---  | ---  |
-|`0.482178`| `8.743232`|`0.434060`| `6.259540`|
+| old_ssim | old_psnr | old_mse |
+| ---  | ---  | --- |
+|`0.589550`| `40.7537`| `6.77883` |
+
+| ssim | psnr | mse | 
+| ---  | ---  | ---  |
+|`0.5152` | `40.1628`| `7.8534`|
 
 with valid maskwith valid mask:
-| old_ssim | old_psnr | ssim | psnr |
-| ---  | ---  | ---  | ---  |
-|`0.995528`|`19.32136`|`0.943887`|`17.897549`|
 
+| old_ssim | old_psnr | old mse |
+| ---  | ---  | ---  | ---  |
+|`0.999628`|`69.2222`| `0.05515` |
+
+
+| ssim | psnr | mse |
+| ---  | ---  | ---  | ---  |
+|`0.991639`|`52.4680`| `0.4256` |
 
 # Compare resize and original size
 ## resize之后， ssim和psnr下降。缺失处预测结果略好
@@ -229,10 +237,20 @@ with valid maskwith valid mask:
 ![](data0929_1219_compare/frame-000008.png)
 ![](data0929_1219_compare/frame-000009.png)
 
-# New Captured data
+<!-- # New Captured data
 ![](data1219/dorm/combine/d10_p0_RGB_t202824163.png)
 ![](data1219/dorm/combine/d11_p0_RGB_t220357278.png)
 ![](data1219/dorm/combine/d12_p0_RGB_t234957097.png)
 ![](data1219/dorm/combine/d14_p0_RGB_t272706634.png)
 ![](data1219/dorm/combine/d2_p0_RGB_t61792621.png)
+![](data1219/dorm/combine/d15_p0_RGB_t291473071.png)
 
+| ssim | psnr |
+| ---  | ---  |
+|`0.524553`| `7.980019`|
+
+with valid mask:
+
+| ssim | psnr |
+| ---  | ---  |
+|`0.847129`|`16.355815`| -->
