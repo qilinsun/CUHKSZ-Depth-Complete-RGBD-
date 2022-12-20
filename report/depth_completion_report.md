@@ -162,9 +162,11 @@ more result: see [gradient_loss result on our data](batchsize_16_gradientloss/ou
 
 In paper, SSIM = 0.838
 
-| ssim | psnr | mse |
-| ---  | ---  | --- |
-|`0.589550`| `40.7537`| `6.77883` |
+| ssim | psnr |
+| ---  | ---  |
+|`0.84837`| `53.00492`|
+
+
 ### our data
 
 
