@@ -158,35 +158,44 @@ more result: see [gradient_loss result on our data](batchsize_16_gradientloss/ou
 
 ## Evaluation SSIM & PSNR
 
-### l1 + gradient loss (on matterport)
+### Paper (matterport dataset)
 
-In paper, SSIM = 0.838
+| RMSE | MAE | ssim | d1 | d2 | d3 |
+| ---  | ---  | ---  | ---  | ---  | ---  |
+| `1.019` | `0.290` | `0.838`| `0.871` | `0.928` | `0.948` |
 
-| ssim | psnr |
-| ---  | ---  |
-|`0.84837`| `53.00492`|
+### l1 loss (matterport dataset)
+
+| RMSE | MAE | ssim | psnr | d1 | d2 | d3 | REL |
+| ---  | ---  | ---  | ---  | ---  | ---  | ---  | --- |
+| `0.8953` | `0.4299` | `0.9259`| `56.4660`| `0.8487` | `0.9068` | `0.9308` | `0.6501` |
+
+### l1 + gradient loss (matterport dataset)
 
 
-### our data
+| RMSE | MAE | ssim | psnr | d1 | d2 | d3 | REL |
+| ---  | ---  | ---  | ---  | ---  | ---  | ---  | --- |
+| `0.8781` | `0.4228` | `0.9234`| `56.7954`| `0.8513` | `0.9092` | `0.9325` | `0.6403` |
 
+### l1 loss (our data)
 
 compare the predicted depth with raw depth
 
 without valid mask:
 
-| ssim | psnr | mse |
-| ---  | ---  | --- |
-|`0.589550`| `40.7537`| `6.77883` |
+| RMSE| MAE | ssim | psnr | mse |
+| ---  | ---  | --- | ---  | --- |
+| `2.5719`| `1.8116` | `0.5870`| `28.6766`| `7.2165` |
 
 with valid mask:
 
-| ssim | psnr | mse |
-| ---  | ---  | --- |
-|`0.999628`|`69.2222`| `0.05515` |
+| mask_RMSE | mask_MAE | mask_ssim | mask_psnr | mask_mse |
+| ---  | ---  | --- | ---  | ---  |
+| `0.1506` |`0.0252` |`0.9997`|`57.3338`| `0.0544` |
 
 # After Resize the our image 
 
-paper 中使用的数据集可能直接将高分辨率的图像resize成320*256的图像。
+paper 中使用的数据集直接将高分辨率的图像resize成320*256的图像。
 
 将我们的图像resize成320*256之后喂入网络，结果如下
 
@@ -205,29 +214,25 @@ more result: see [resized result on our data](batchsize_16_gradientloss/ourdata/
 
 compare the predicted depth with raw depth
 
-without valid mask:
 
-| old_ssim | old_psnr | old_mse |
-| ---  | ---  | --- |
-|`0.589550`| `40.7537`| `6.77883` |
 
-| ssim | psnr | mse | 
-| ---  | ---  | ---  |
-|`0.5152` | `40.1628`| `7.8534`|
+| unresize RMSE| unresize MAE| unresize ssim | unresize psnr | unresize mse |
+| ---  | ---  | --- | ---  | --- |
+| `2.5719`| `1.8116`|`0.5870`| `28.6766`| `7.2165` |
+| resize RMSE | resize MAE | resize ssim | resize psnr | resize mse |
+| `2.6816` | `2.0797` |`0.5152`| `28.3615`| `7.8534` |
 
 with valid maskwith valid mask:
 
-| old_ssim | old_psnr | old mse |
-| ---  | ---  | ---  | 
-|`0.999628`|`69.2222`| `0.05515` |
-
-
-| ssim | psnr | mse |
-| ---  | ---  | ---  | 
-|`0.991639`|`52.4680`| `0.4256` |
+| unresize mask_RMSE | unresize mask_MAE | unresize mask_ssim | unresize mask_psnr | unresize mask_mse |
+| ---  | ---  | --- | ---  | ---  |
+| `0.1506` | `0.0252` |`0.9997`|`57.3338`| `0.0544` |
+| resize mask_RMSE | resize mask_MAE | resize mask_ssim | resize mask_psnr | resize mask_mse |
+| `0.6317` | `0.1863` |`0.9916`| `40.6668`| `0.4256` |
 
 # Compare resize and original size
-## resize之后， ssim和psnr下降。缺失处预测结果略好
+
+## 从左到右依次为，RGB, 输入深度图, resize过后预测深度图，resize之前预测深度图
 ![](data0929_1219_compare/frame-000000.png)
 ![](data0929_1219_compare/frame-000001.png)
 ![](data0929_1219_compare/frame-000002.png)
