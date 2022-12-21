@@ -222,13 +222,19 @@ compare the predicted depth with raw depth
 | resize RMSE | resize MAE | resize ssim | resize psnr | resize mse |
 | `2.6816` | `2.0797` |`0.5152`| `28.3615`| `7.8534` |
 
-with valid maskwith valid mask:
+with valid mask
 
 | unresize mask_RMSE | unresize mask_MAE | unresize mask_ssim | unresize mask_psnr | unresize mask_mse |
 | ---  | ---  | --- | ---  | ---  |
 | `0.1506` | `0.0252` |`0.9997`|`57.3338`| `0.0544` |
 | resize mask_RMSE | resize mask_MAE | resize mask_ssim | resize mask_psnr | resize mask_mse |
 | `0.6317` | `0.1863` |`0.9916`| `40.6668`| `0.4256` |
+
+with valid mask, compare predicted depth and raw depth on `matterport dataset`
+
+| mask_RMSE | mask_MAE | mask_ssim | mask_psnr | mask_mse |
+| ---  | ---  | --- | ---  | ---  |
+| `0.7188` | `0.2412` |`0.9331`|`31.0013`| `0.8913` |
 
 # Compare resize and original size
 
