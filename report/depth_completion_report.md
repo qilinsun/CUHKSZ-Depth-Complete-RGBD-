@@ -250,7 +250,8 @@ with valid mask, compare predicted depth and raw depth on `matterport dataset`
 ![](data0929_1219_compare/frame-000008.png)
 ![](data0929_1219_compare/frame-000009.png)
 
-<!-- # New Captured data
+# New Captured data
+
 ![](data1219/dorm/combine/d10_p0_RGB_t202824163.png)
 ![](data1219/dorm/combine/d11_p0_RGB_t220357278.png)
 ![](data1219/dorm/combine/d12_p0_RGB_t234957097.png)
@@ -258,12 +259,18 @@ with valid mask, compare predicted depth and raw depth on `matterport dataset`
 ![](data1219/dorm/combine/d2_p0_RGB_t61792621.png)
 ![](data1219/dorm/combine/d15_p0_RGB_t291473071.png)
 
-| ssim | psnr |
-| ---  | ---  |
-|`0.524553`| `7.980019`|
+# l1 gradient loss
+
+compare the predicted depth with raw depth
+
+without valid mask:
+
+| RMSE| MAE | ssim | psnr | mse |
+| ---  | ---  | --- | ---  | --- |
+| `1.6864`| `1.0892` | `0.6779`| `32.7003`| `3.4926` |
 
 with valid mask:
 
-| ssim | psnr |
-| ---  | ---  |
-|`0.847129`|`16.355815`| -->
+| mask_RMSE | mask_MAE | mask_ssim | mask_psnr | mask_mse |
+| ---  | ---  | --- | ---  | ---  |
+| ` 0.4968` |`0.1488` |`0.96663`|`43.2612`| `0.2889` |
